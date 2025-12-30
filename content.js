@@ -1,62 +1,58 @@
 /**
  * LinkPost Extension - Content Script
- * 
+ *
  * Ce script observe les changements dans le DOM pour injecter un lien "Posts programmés"
- * dans la carte de profil de l'utilisateur sur le feed LinkedIn.
+ * dans le menu de navigation gauche du feed LinkedIn.
  */
 
 (function () {
     'use strict';
 
     // Configuration
-    const TARGET_SELECTOR = '.profile-card-member-details';
+    const TARGET_SELECTOR = '.feed-left-nav-common-module__widgets';
     const LINK_ID = 'linkpost-scheduled-posts-link';
     const LINK_TEXT = 'Posts programmés';
     const LINK_URL = 'https://www.linkedin.com/feed/?shareActive=true&view=management';
 
     /**
-     * Crée et retourne l'élément lien à injecter.
-     * Utilise les styles par défaut de LinkedIn pour les liens dans ce contexte.
+     * Crée et retourne l'élément <li> à injecter.
+     * Utilise les classes LinkedIn pour s'intégrer naturellement.
      */
-    function createLink() {
-        const link = document.createElement('a');
-        link.id = LINK_ID;
-        link.href = LINK_URL;
-        link.textContent = LINK_TEXT;
-        link.target = '_self'; // S'ouvre dans le même onglet comme demandé
+    function createNavItem() {
+        const li = document.createElement('li');
+        li.className = 'list-style-none mt4';
+        li.id = LINK_ID;
 
-        // Styles pour s'intégrer proprement (au cas où le CSS parent ne suffirait pas)
-        // On essaye de rester minimaliste pour hériter du style parent
-        link.style.display = 'block';
-        link.style.marginTop = '4px';
-        link.style.fontSize = '12px';
-        link.style.fontWeight = '600';
-        link.style.textDecoration = 'none';
-        link.style.color = '#0a66c2'; // Couleur standard bleu LinkedIn
+        li.innerHTML = `
+            <a href="${LINK_URL}" class="ember-view feed-left-nav-common-module__link">
+                <p class="t-12 t-black t-bold v-align-middle display-flex" style="padding-left: 2px;">
+                    <svg role="none" aria-hidden="true" class="artdeco-button__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>${LINK_TEXT}</span>
+                </p>
+            </a>
+        `;
 
-        // Hover effect simple
-        link.onmouseover = () => link.style.textDecoration = 'underline';
-        link.onmouseout = () => link.style.textDecoration = 'none';
-
-        return link;
+        return li;
     }
 
     /**
      * Tente d'injecter le lien si les conditions sont réunies.
      */
     function tryInjectLink() {
-        // 1. Chercher la carte de profil
-        const targetDiv = document.querySelector(TARGET_SELECTOR);
+        // 1. Chercher le ul de navigation
+        const targetUl = document.querySelector(TARGET_SELECTOR);
 
-        // 2. Si la div n'existe pas, ou si le lien existe déjà, on ne fait rien
-        if (!targetDiv || document.getElementById(LINK_ID)) {
+        // 2. Si le ul n'existe pas, ou si le lien existe déjà, on ne fait rien
+        if (!targetUl || document.getElementById(LINK_ID)) {
             return;
         }
 
-        // 3. Créer et ajouter le lien
-        const link = createLink();
-        targetDiv.appendChild(link);
-        // console.log('LinkPost: Lien injecté avec succès.');
+        // 3. Créer et ajouter le li à la fin du ul
+        const navItem = createNavItem();
+        targetUl.appendChild(navItem);
     }
 
     /**
