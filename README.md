@@ -1,4 +1,4 @@
-<img src="icons/icon512.png" alt="LinkPost Logo" width="120" height="120">
+<img src="icons/icon128.png" alt="LinkPost Logo" width="120" height="120">
 
 # LinkPost - Extension LinkedIn
 
@@ -29,7 +29,7 @@ L'extension est maintenant active !
 3.  Vous devriez voir apparaître le lien **"Posts programmés"** avec une icône d'horloge.
 4.  Cliquez dessus pour visualiser vos posts programmés.
 
-<img src="icons/capture.jpg" alt="LinkPost Logo">
+<img src="images/capture_01.jpg" alt="Capture d'écran LinkPost">
 
 ## Limitations connues
 
