@@ -1,12 +1,14 @@
 {
   "manifest_version": 3,
   "name": "LinkPost for LinkedIn",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Ajoute un lien rapide vers les posts programmés sur LinkedIn.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "128": "icons/icon128.png",
+    "512": "icons/icon512.png",
+    "1024": "icons/icon1024.png"
   },
   "content_scripts": [
     {
