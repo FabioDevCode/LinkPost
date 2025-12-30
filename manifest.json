@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "LinkPost",
-  "version": "1.0.1",
-  "description": "Ajoute un lien rapide vers les posts programmés sur LinkedIn.",
+  "name": "LinkPost - Raccourci Posts Programmés",
+  "version": "1.1.0",
+  "description": "Accédez à vos posts LinkedIn programmés en un clic depuis votre fil d'actualité.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
