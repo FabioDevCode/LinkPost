@@ -5,14 +5,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     const scheduledPostsToggle = document.getElementById('scheduledPosts');
     const hidePremiumAdsToggle = document.getElementById('hidePremiumAds');
+    const pinShareBoxToggle = document.getElementById('pinShareBox');
 
     // Charger l'état actuel depuis le storage
     chrome.storage.sync.get({
         scheduledPostsEnabled: true,
-        hidePremiumAdsEnabled: false
+        hidePremiumAdsEnabled: false,
+        pinShareBoxEnabled: false
     }, (result) => {
         scheduledPostsToggle.checked = result.scheduledPostsEnabled;
         hidePremiumAdsToggle.checked = result.hidePremiumAdsEnabled;
+        pinShareBoxToggle.checked = result.pinShareBoxEnabled;
     });
 
     // Sauvegarder lors du changement - Posts programmés
@@ -26,6 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     hidePremiumAdsToggle.addEventListener('change', () => {
         chrome.storage.sync.set({
             hidePremiumAdsEnabled: hidePremiumAdsToggle.checked
+        });
+    });
+
+    // Sauvegarder lors du changement - Création de posts
+    pinShareBoxToggle.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            pinShareBoxEnabled: pinShareBoxToggle.checked
         });
     });
 });
