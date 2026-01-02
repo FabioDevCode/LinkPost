@@ -1,4 +1,4 @@
-<img src="icons/icon128.png" alt="LinkPost Logo" width="120" height="120">
+<img src="icons/icon48.png" alt="LinkPost Logo" width="120" height="120">
 
 # LinkPost - Raccourcis Posts Programmés et plus
 
