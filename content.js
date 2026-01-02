@@ -4,19 +4,34 @@
  * Ce script observe les changements dans le DOM pour injecter un lien "Posts programmés"
  * dans le menu de navigation gauche du feed LinkedIn.
  * Il écoute les changements de storage pour afficher/masquer le lien dynamiquement.
+ * Il peut également masquer les publicités Premium LinkedIn.
  */
 
 (function () {
     'use strict';
 
-    // Configuration
+    // Configuration - Posts programmés
     const TARGET_SELECTOR = '.feed-left-nav-common-module__widgets';
     const LINK_ID = 'linkpost-scheduled-posts-link';
     const LINK_TEXT = 'Posts programmés';
     const LINK_URL = 'https://www.linkedin.com/feed/?shareActive=true&view=management';
 
+    // Configuration - Masquer pub Premium
+    const PREMIUM_LINK_SELECTOR = 'a[href*="/premium/products"]';
+    const HIDDEN_CLASS = 'linkpost-hidden';
+
     // État local
-    let isEnabled = true;
+    let isScheduledPostsEnabled = true;
+    let isHidePremiumAdsEnabled = false;
+
+    // Injecter le style CSS pour masquer les éléments
+    function injectHiddenStyle() {
+        if (document.getElementById('linkpost-style')) return;
+        const style = document.createElement('style');
+        style.id = 'linkpost-style';
+        style.textContent = `.${HIDDEN_CLASS} { display: none !important; visibility: hidden !important; }`;
+        document.head.appendChild(style);
+    }
 
     /**
      * Crée et retourne l'élément <li> à injecter.
@@ -57,7 +72,7 @@
      */
     function tryInjectLink() {
         // Ne pas injecter si désactivé
-        if (!isEnabled) {
+        if (!isScheduledPostsEnabled) {
             return;
         }
 
@@ -78,11 +93,30 @@
      * Met à jour l'affichage du lien en fonction de l'état.
      */
     function updateLinkVisibility() {
-        if (isEnabled) {
+        if (isScheduledPostsEnabled) {
             tryInjectLink();
         } else {
             removeLink();
         }
+    }
+
+    /**
+     * Masque ou affiche les DIVs contenant des liens Premium.
+     */
+    function updatePremiumAdsVisibility() {
+        const premiumLinks = document.querySelectorAll(PREMIUM_LINK_SELECTOR);
+
+        premiumLinks.forEach(link => {
+            // Remonter jusqu'à la DIV parente la plus proche
+            const parentDiv = link.closest('div');
+            if (parentDiv) {
+                if (isHidePremiumAdsEnabled) {
+                    parentDiv.classList.add(HIDDEN_CLASS);
+                } else {
+                    parentDiv.classList.remove(HIDDEN_CLASS);
+                }
+            }
+        });
     }
 
     /**
@@ -100,6 +134,9 @@
 
             if (shouldCheck) {
                 tryInjectLink();
+                if (isHidePremiumAdsEnabled) {
+                    updatePremiumAdsVisibility();
+                }
             }
         });
 
@@ -110,6 +147,7 @@
 
         // Essayer une première fois au cas où le DOM est déjà prêt
         tryInjectLink();
+        updatePremiumAdsVisibility();
     }
 
     /**
@@ -117,9 +155,15 @@
      */
     function initStorageListener() {
         chrome.storage.onChanged.addListener((changes, areaName) => {
-            if (areaName === 'sync' && changes.scheduledPostsEnabled) {
-                isEnabled = changes.scheduledPostsEnabled.newValue;
-                updateLinkVisibility();
+            if (areaName === 'sync') {
+                if (changes.scheduledPostsEnabled) {
+                    isScheduledPostsEnabled = changes.scheduledPostsEnabled.newValue;
+                    updateLinkVisibility();
+                }
+                if (changes.hidePremiumAdsEnabled) {
+                    isHidePremiumAdsEnabled = changes.hidePremiumAdsEnabled.newValue;
+                    updatePremiumAdsVisibility();
+                }
             }
         });
     }
@@ -128,11 +172,15 @@
      * Démarrage principal.
      */
     function init() {
+        // Injecter le style CSS
+        injectHiddenStyle();
+
         // Vérifier que chrome.storage est disponible
         if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
             // Fallback: activer par défaut si storage indisponible
             console.warn('LinkPost: chrome.storage non disponible, mode par défaut activé.');
-            isEnabled = true;
+            isScheduledPostsEnabled = true;
+            isHidePremiumAdsEnabled = false;
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', initObserver);
             } else {
@@ -142,8 +190,12 @@
         }
 
         // Charger l'état initial depuis le storage
-        chrome.storage.sync.get({ scheduledPostsEnabled: true }, (result) => {
-            isEnabled = result.scheduledPostsEnabled;
+        chrome.storage.sync.get({
+            scheduledPostsEnabled: true,
+            hidePremiumAdsEnabled: false
+        }, (result) => {
+            isScheduledPostsEnabled = result.scheduledPostsEnabled;
+            isHidePremiumAdsEnabled = result.hidePremiumAdsEnabled;
 
             // Initialiser l'observateur DOM
             if (document.readyState === 'loading') {
@@ -160,3 +212,4 @@
     init();
 
 })();
+
