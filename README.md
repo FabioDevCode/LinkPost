@@ -1,43 +1,80 @@
 <img src="icons/icon128.png" alt="LinkPost Logo" width="120" height="120">
 
-# LinkPost - Extension LinkedIn
+# LinkPost - Raccourcis Posts Programmés et plus
 
-Une extension Chrome simple qui ajoute un lien direct vers vos "Posts programmés" dans l'interface de LinkedIn.
+Une extension Chrome simple et personnalisable qui améliore votre expérience LinkedIn avec des raccourcis pratiques et une interface épurée.
 
-## Fonctionnalités
+## ✨ Fonctionnalités
 
-- **Accès rapide** : Ajoute un lien "Posts programmés" directement dans le menu de navigation gauche du feed LinkedIn.
-- **Intégration native** : Respecte le style visuel de LinkedIn pour une intégration transparente.
-- **Léger & Sûr** : Pas de tracking, pas d'appels API, pas de permissions intrusives. Juste un script simple.
+### 🔗 Raccourcis Navigation
 
-## Installation (Mode Développeur)
+- **Posts programmés** : Accédez à vos posts en attente en un clic depuis le menu de navigation gauche.
+- **Créer un post** : Ouvrez directement la fenêtre de création de publication.
 
-Cette extension n'est pas encore sur le Chrome Web Store. Vous pouvez l'installer manuellement :
+### 🧹 Interface Épurée
 
-1.  Téléchargez ou clonez ce dossier sur votre ordinateur.
-2.  Ouvrez Google Chrome et allez sur `chrome://extensions`.
-3.  Activez le **Mode développeur** via le bouton en haut à droite.
-4.  Cliquez sur **Charger l'extension non empaquetée** (Load unpacked).
-5.  Sélectionnez le dossier `LinkPost` (celui qui contient le fichier `manifest.json`).
+- **Masquer pub Premium** : Cachez les encarts publicitaires LinkedIn Premium.
+- **Masquer les jeux** : Supprimez la section jeux de votre fil d'actualité.
 
-L'extension est maintenant active !
+### ⚙️ Personnalisation
 
-## Utilisation
+- **Popup de paramètres** : Activez/désactivez chaque fonctionnalité selon vos besoins.
+- **Sauvegarde automatique** : Vos préférences sont conservées dans votre navigateur.
 
-1.  Rendez-vous sur [LinkedIn](https://www.linkedin.com/feed/).
-2.  Une fois sur votre feed, regardez le menu de navigation dans la colonne de gauche.
-3.  Vous devriez voir apparaître le lien **"Posts programmés"** avec une icône d'horloge.
-4.  Cliquez dessus pour visualiser vos posts programmés.
+### 🎨 Intégration Native
 
-<img src="images/capture_01.jpg" alt="Capture d'écran LinkPost">
+- Design respectant l'interface officielle de LinkedIn.
+- Léger et performant : ne ralentit pas votre navigateur.
 
-## Limitations connues
+## 🛡️ Confidentialité et Sécurité
 
-- L'extension dépend de la structure HTML de LinkedIn (sélecteur `.feed-left-nav-common-module__widgets`). Si LinkedIn met à jour son design, l'extension pourrait nécessiter une mise à jour.
-- Le lien est injecté dynamiquement. Il peut apparaître avec un très léger délai après le chargement de la page.
+- ✅ Aucune collecte de données personnelles
+- ✅ Pas d'appels API externes
+- ✅ Code open-source pour une transparence totale
+- ✅ Préférences stockées localement uniquement
 
-## Structure du projet
+## 📥 Installation
 
-- `manifest.json` : Configuration de l'extension (Manifest V3).
-- `content.js` : Le script qui injecte le lien intelligemment.
-- `icons/` : Les icônes de l'extension.
+### Chrome Web Store
+
+L'extension est disponible sur le [Chrome Web Store](https://chrome.google.com/webstore).
+
+### Mode Développeur
+
+1. Téléchargez ou clonez ce dépôt sur votre ordinateur.
+2. Ouvrez Google Chrome et allez sur `chrome://extensions`.
+3. Activez le **Mode développeur** via le bouton en haut à droite.
+4. Cliquez sur **Charger l'extension non empaquetée**.
+5. Sélectionnez le dossier `LinkPost` (celui qui contient le fichier `manifest.json`).
+
+## 🚀 Utilisation
+
+1. Rendez-vous sur [LinkedIn](https://www.linkedin.com/feed/).
+2. Regardez le menu de navigation dans la colonne de gauche.
+3. Les nouveaux liens apparaissent avec leurs icônes dédiées.
+4. Cliquez sur l'icône de l'extension pour accéder aux paramètres.
+
+## ⚠️ Limitations connues
+
+- L'extension dépend de la structure HTML de LinkedIn. Si LinkedIn met à jour son design, une mise à jour pourrait être nécessaire.
+- Les liens sont injectés dynamiquement et peuvent apparaître avec un très léger délai.
+
+## 📁 Structure du projet
+
+```
+LinkPost/
+├── manifest.json    # Configuration de l'extension (Manifest V3)
+├── content.js       # Script d'injection des liens
+├── popup.html       # Interface du popup de paramètres
+├── popup.js         # Logique du popup
+├── popup.css        # Styles du popup
+└── icons/           # Icônes de l'extension
+```
+
+## 📝 Note importante
+
+Cette extension est un projet indépendant développé pour améliorer l'expérience utilisateur sur LinkedIn. Elle n'est pas affiliée, approuvée ou associée de quelque manière que ce soit à LinkedIn Corporation.
+
+## 📄 Licence
+
+MIT License - Voir le fichier LICENSE pour plus de détails.
