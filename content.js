@@ -27,10 +27,14 @@
     const PREMIUM_LINK_SELECTOR = 'a[href*="/premium/products"]';
     const HIDDEN_CLASS = 'linkpost-hidden';
 
+    // Configuration - Masquer les jeux
+    const GAMES_SELECTOR = '[aria-labelledby="todays-games-entrypoint-title"]';
+
     // État local
     let isScheduledPostsEnabled = true;
     let isHidePremiumAdsEnabled = false;
     let isCreatePostEnabled = false;
+    let isHideGamesEnabled = false;
 
     // Injecter le style CSS pour masquer les éléments
     function injectHiddenStyle() {
@@ -197,6 +201,28 @@
     }
 
     /**
+     * Masque ou affiche la section des jeux.
+     */
+    function updateGamesVisibility() {
+        try {
+            const gamesElements = document.querySelectorAll(GAMES_SELECTOR);
+
+            gamesElements.forEach(element => {
+                const parentDiv = element.parentElement;
+                if (parentDiv) {
+                    if (isHideGamesEnabled) {
+                        parentDiv.classList.add(HIDDEN_CLASS);
+                    } else {
+                        parentDiv.classList.remove(HIDDEN_CLASS);
+                    }
+                }
+            });
+        } catch (e) {
+            console.error('LinkPost: Error updating Games visibility', e);
+        }
+    }
+
+    /**
      * Initialise l'observateur de mutations pour gérer le chargement dynamique (SPA).
      */
     function initObserver() {
@@ -216,6 +242,9 @@
                 if (isHidePremiumAdsEnabled) {
                     updatePremiumAdsVisibility();
                 }
+                if (isHideGamesEnabled) {
+                    updateGamesVisibility();
+                }
             }
         });
 
@@ -232,6 +261,7 @@
         tryInjectScheduledPostsLink();
         tryInjectCreatePostLink();
         updatePremiumAdsVisibility();
+        updateGamesVisibility();
     }
 
     /**
@@ -251,6 +281,10 @@
                 if (changes.pinShareBoxEnabled) {
                     isCreatePostEnabled = changes.pinShareBoxEnabled.newValue;
                     updateCreatePostVisibility();
+                }
+                if (changes.hideGamesEnabled) {
+                    isHideGamesEnabled = changes.hideGamesEnabled.newValue;
+                    updateGamesVisibility();
                 }
             }
         });
@@ -279,12 +313,14 @@
             chrome.storage.sync.get({
                 scheduledPostsEnabled: true,
                 hidePremiumAdsEnabled: false,
-                pinShareBoxEnabled: false
+                pinShareBoxEnabled: false,
+                hideGamesEnabled: false
             }, (result) => {
                 console.log('LinkPost: Config loaded', result);
                 isScheduledPostsEnabled = result.scheduledPostsEnabled;
                 isHidePremiumAdsEnabled = result.hidePremiumAdsEnabled;
                 isCreatePostEnabled = result.pinShareBoxEnabled;
+                isHideGamesEnabled = result.hideGamesEnabled;
 
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', initObserver);
@@ -300,7 +336,6 @@
     }
 
     init();
-
 })();
 
 
