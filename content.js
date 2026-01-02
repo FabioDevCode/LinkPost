@@ -3,6 +3,7 @@
  *
  * Ce script observe les changements dans le DOM pour injecter un lien "Posts programmés"
  * dans le menu de navigation gauche du feed LinkedIn.
+ * Il écoute les changements de storage pour afficher/masquer le lien dynamiquement.
  */
 
 (function () {
@@ -13,6 +14,9 @@
     const LINK_ID = 'linkpost-scheduled-posts-link';
     const LINK_TEXT = 'Posts programmés';
     const LINK_URL = 'https://www.linkedin.com/feed/?shareActive=true&view=management';
+
+    // État local
+    let isEnabled = true;
 
     /**
      * Crée et retourne l'élément <li> à injecter.
@@ -39,9 +43,24 @@
     }
 
     /**
+     * Supprime le lien s'il existe.
+     */
+    function removeLink() {
+        const existingLink = document.getElementById(LINK_ID);
+        if (existingLink) {
+            existingLink.remove();
+        }
+    }
+
+    /**
      * Tente d'injecter le lien si les conditions sont réunies.
      */
     function tryInjectLink() {
+        // Ne pas injecter si désactivé
+        if (!isEnabled) {
+            return;
+        }
+
         // 1. Chercher le ul de navigation
         const targetUl = document.querySelector(TARGET_SELECTOR);
 
@@ -56,12 +75,21 @@
     }
 
     /**
+     * Met à jour l'affichage du lien en fonction de l'état.
+     */
+    function updateLinkVisibility() {
+        if (isEnabled) {
+            tryInjectLink();
+        } else {
+            removeLink();
+        }
+    }
+
+    /**
      * Initialise l'observateur de mutations pour gérer le chargement dynamique (SPA).
      */
     function initObserver() {
-        // Observer le corps du document pour détecter l'apparition de la carte de profil
         const observer = new MutationObserver((mutations) => {
-            // Optimisation : on ne vérifie que si des noeuds ont été ajoutés
             let shouldCheck = false;
             for (const mutation of mutations) {
                 if (mutation.addedNodes.length > 0) {
@@ -84,11 +112,51 @@
         tryInjectLink();
     }
 
-    // Démarrage
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initObserver);
-    } else {
-        initObserver();
+    /**
+     * Initialise l'écoute des changements de storage.
+     */
+    function initStorageListener() {
+        chrome.storage.onChanged.addListener((changes, areaName) => {
+            if (areaName === 'sync' && changes.scheduledPostsEnabled) {
+                isEnabled = changes.scheduledPostsEnabled.newValue;
+                updateLinkVisibility();
+            }
+        });
     }
+
+    /**
+     * Démarrage principal.
+     */
+    function init() {
+        // Vérifier que chrome.storage est disponible
+        if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
+            // Fallback: activer par défaut si storage indisponible
+            console.warn('LinkPost: chrome.storage non disponible, mode par défaut activé.');
+            isEnabled = true;
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initObserver);
+            } else {
+                initObserver();
+            }
+            return;
+        }
+
+        // Charger l'état initial depuis le storage
+        chrome.storage.sync.get({ scheduledPostsEnabled: true }, (result) => {
+            isEnabled = result.scheduledPostsEnabled;
+
+            // Initialiser l'observateur DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initObserver);
+            } else {
+                initObserver();
+            }
+
+            // Écouter les changements de storage
+            initStorageListener();
+        });
+    }
+
+    init();
 
 })();
