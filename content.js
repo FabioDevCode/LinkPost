@@ -29,7 +29,7 @@
     const HIDDEN_CLASS = 'linkpost-hidden';
 
     // Configuration - Masquer les jeux
-    const GAMES_SELECTOR = '[aria-labelledby="todays-games-entrypoint-title"]';
+    const GAMES_SELECTOR = 'a[href^="/games"]';
 
     // État local
     let isScheduledPostsEnabled = true;
@@ -223,22 +223,37 @@
     }
 
     /**
-     * Masque ou affiche la section des jeux.
+     * Masque ou affiche les liens vers les jeux et les éléments associés.
      */
     function updateGamesVisibility() {
         try {
-            const gamesElements = document.querySelectorAll(GAMES_SELECTOR);
+            // Masquer les liens avec href commençant par /games
+            const gamesLinks = document.querySelectorAll(GAMES_SELECTOR);
 
-            gamesElements.forEach(element => {
-                const parentDiv = element.parentElement;
-                if (parentDiv) {
-                    if (isHideGamesEnabled) {
-                        parentDiv.classList.add(HIDDEN_CLASS);
-                    } else {
-                        parentDiv.classList.remove(HIDDEN_CLASS);
-                    }
+            gamesLinks.forEach(link => {
+                if (isHideGamesEnabled) {
+                    link.classList.add(HIDDEN_CLASS);
+                } else {
+                    link.classList.remove(HIDDEN_CLASS);
                 }
             });
+
+            // Masquer l'élément avec data-view-name="game-card-zip" et son élément précédent
+            const gameCardZip = document.querySelector('[data-view-name="game-card-zip"]');
+            if (gameCardZip) {
+                if (isHideGamesEnabled) {
+                    gameCardZip.classList.add(HIDDEN_CLASS);
+                    // Masquer aussi l'élément précédent
+                    if (gameCardZip.previousElementSibling) {
+                        gameCardZip.previousElementSibling.classList.add(HIDDEN_CLASS);
+                    }
+                } else {
+                    gameCardZip.classList.remove(HIDDEN_CLASS);
+                    if (gameCardZip.previousElementSibling) {
+                        gameCardZip.previousElementSibling.classList.remove(HIDDEN_CLASS);
+                    }
+                }
+            }
         } catch (e) {
             console.error('LinkPost: Error updating Games visibility', e);
         }
