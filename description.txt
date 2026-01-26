@@ -1,0 +1,37 @@
+TITRE SUGGÉRÉ :
+LinkPost - Raccourcis Posts Programmés et plus
+
+==================================================
+
+DESCRIPTION :
+
+Accédez à vos posts LinkedIn programmés en un clic et personnalisez votre expérience LinkedIn.
+
+Gagnez du temps sur LinkedIn !
+
+Vous utilisez la fonctionnalité de programmation native de LinkedIn mais vous trouvez fastidieux d'accéder à la liste de vos posts en attente ? Vous souhaitez une interface plus épurée ? LinkPost est l'outil simple et léger qu'il vous faut.
+
+Fonctionnalités clés :
+
+- Accès Direct aux Posts Programmés : Ajoute un lien "Posts programmés" avec une icône dédiée dans votre menu de navigation gauche.
+- Raccourci Création de Posts : Accédez directement à la fenêtre de création de post depuis le menu latéral.
+- Interface Personnalisable : Activez ou désactivez chaque fonctionnalité selon vos besoins via un panneau de paramètres intuitif.
+- Masquer les Publicités Premium : Cachez les encarts publicitaires LinkedIn Premium pour une navigation plus fluide (optionnel).
+- Masquer les Jeux : Supprimez la section jeux de votre fil d'actualité pour réduire les distractions (optionnel).
+- Intégration Transparente : Le design respecte l'interface officielle de LinkedIn pour une expérience fluide et naturelle.
+- Légèreté Absolue : L'extension ne ralentit pas votre navigateur et ne s'active que sur LinkedIn.
+
+Confidentialité et Sécurité :
+
+- Aucune collecte de données personnelles.
+- Pas d'appels API externes.
+- Code open-source pour une transparence totale.
+- Toutes vos préférences sont stockées localement dans votre navigateur.
+
+Note importante :
+
+Cette extension est un projet indépendant développé pour améliorer l'expérience utilisateur sur LinkedIn.
+Elle n'est pas affiliée, approuvée ou associée de quelque manière que ce soit à LinkedIn Corporation.
+Son unique objectif est de faciliter la navigation et la gestion de contenu pour les utilisateurs.
+
+Simplifiez votre gestion de contenu et personnalisez votre expérience LinkedIn dès aujourd'hui avec LinkPost !

@@ -13,7 +13,8 @@
     console.log('LinkPost: Script loaded');
 
     // Configuration - Posts programmés
-    const TARGET_SELECTOR = '.feed-left-nav-common-module__widgets';
+    const NAV_ITEM_ATTRIBUTE = 'data-view-name';
+    const NAV_ITEM_VALUE = 'home-nav-left-rail-common-module-my-items';
     const LINK_ID = 'linkpost-scheduled-posts-link';
     const LINK_TEXT = 'Posts programmés';
     const LINK_URL = 'https://www.linkedin.com/feed/?shareActive=true&view=management';
@@ -50,48 +51,69 @@
     }
 
     /**
-     * Crée et retourne l'élément <li> pour "Posts programmés".
+     * Trouve le conteneur DIV parent des liens de navigation.
+     * Cherche un lien avec l'attribut data-view-name="home-nav-left-rail-common-module-my-items"
+     * puis remonte au conteneur DIV parent.
      */
-    function createScheduledPostsItem() {
-        const li = document.createElement('li');
-        li.className = 'list-style-none mt4';
-        li.id = LINK_ID;
+    function findNavContainer() {
+        // Chercher un lien existant avec l'attribut spécifique
+        const navLink = document.querySelector(`[${NAV_ITEM_ATTRIBUTE}="${NAV_ITEM_VALUE}"]`);
+        if (!navLink) return null;
 
-        li.innerHTML = `
-            <a href="${LINK_URL}" class="ember-view feed-left-nav-common-module__link">
-                <p class="t-12 t-black t-bold v-align-middle display-flex" style="padding-left: 2px;">
-                    <svg role="none" aria-hidden="true" class="artdeco-button__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 8px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span>${LINK_TEXT}</span>
-                </p>
-            </a>
-        `;
+        // Le lien <a> est directement dans une <div> parent
+        const parentDiv = navLink.parentElement;
+        if (parentDiv && parentDiv.tagName === 'DIV') {
+            return parentDiv;
+        }
 
-        return li;
+        return null;
     }
 
     /**
-     * Crée et retourne l'élément <li> pour "Créer un post".
+     * Crée et retourne l'élément <a> pour "Posts programmés".
      */
-    function createCreatePostItem() {
-        const li = document.createElement('li');
-        li.className = 'list-style-none mt4';
-        li.id = CREATE_POST_ID;
+    function createScheduledPostsItem() {
+        const link = document.createElement('a');
+        link.href = LINK_URL;
+        link.id = LINK_ID;
+        link.setAttribute(NAV_ITEM_ATTRIBUTE, NAV_ITEM_VALUE);
+        link.setAttribute('tabindex', '0');
+        link.setAttribute('class', "_6ee5d24a _188dd678 _73d748cb c3772e31 _9b83bc80 _3b033628 d74054cf _70b0b4ae _21fc90f6 c06f7ac1 ce8728d9")
 
-        li.innerHTML = `
-            <a href="${CREATE_POST_URL}" class="ember-view feed-left-nav-common-module__link">
-                <p class="t-12 t-black t-bold v-align-middle display-flex" style="padding-left: 2px;">
-                    <svg role="none" aria-hidden="true" class="artdeco-button__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 8px;" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
-                    </svg>
-                    <span>${CREATE_POST_TEXT}</span>
-                </p>
-            </a>
+        link.innerHTML = `
+            <div style="display: flex; padding: 8px 16px;">
+                <svg role="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <p class="_7040b4e5 _80ee3fa5 efc776bd _8094c057 _257153ee _11daf7fc _7f504a6b _8b957603 bf376958">${LINK_TEXT}</p>
+            </div>
         `;
 
-        return li;
+        return link;
+    }
+
+    /**
+     * Crée et retourne l'élément <a> pour "Créer un post".
+     */
+    function createCreatePostItem() {
+        const link = document.createElement('a');
+        link.href = CREATE_POST_URL;
+        link.id = CREATE_POST_ID;
+        link.setAttribute(NAV_ITEM_ATTRIBUTE, NAV_ITEM_VALUE);
+        link.setAttribute('tabindex', '0');
+        link.setAttribute('class', "_6ee5d24a _188dd678 _73d748cb c3772e31 _9b83bc80 _3b033628 d74054cf _70b0b4ae _21fc90f6 c06f7ac1 ce8728d9")
+
+        link.innerHTML = `
+            <div style="display: flex; padding: 8px 16px;">
+                <svg role="none" aria-hidden="true" class="artdeco-button__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 12px;" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                </svg>
+                <p class="_7040b4e5 _80ee3fa5 efc776bd _8094c057 _257153ee _11daf7fc _7f504a6b _8b957603 bf376958">${CREATE_POST_TEXT}</p>
+            </div>
+        `;
+
+        return link;
     }
 
     /**
@@ -121,9 +143,8 @@
         try {
             if (!isScheduledPostsEnabled) return;
 
-            // Utiliser une méthode plus robuste pour trouver le conteneur
-            // On cherche n'importe quel élément qui ressemble à la liste de widgets
-            const targetUl = document.querySelector(TARGET_SELECTOR);
+            // Trouver le conteneur UL via les liens existants avec l'attribut data-view-name
+            const targetUl = findNavContainer();
 
             if (!targetUl) {
                 // Debug log silencieux pour ne pas spammer si l'élément n'est pas encore là
@@ -146,7 +167,8 @@
         try {
             if (!isCreatePostEnabled) return;
 
-            const targetUl = document.querySelector(TARGET_SELECTOR);
+            // Trouver le conteneur UL via les liens existants avec l'attribut data-view-name
+            const targetUl = findNavContainer();
             if (!targetUl || document.getElementById(CREATE_POST_ID)) return;
 
             const navItem = createCreatePostItem();
