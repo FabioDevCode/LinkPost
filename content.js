@@ -81,7 +81,7 @@
         link.setAttribute('class', "_6ee5d24a _188dd678 _73d748cb c3772e31 _9b83bc80 _3b033628 d74054cf _70b0b4ae _21fc90f6 c06f7ac1 ce8728d9")
 
         link.innerHTML = `
-            <div style="display: flex; padding: 8px 16px;">
+            <div style="display: flex; padding: 8px 16px; color: #191919; font-size: 12px !important; font-weight: 600;">
                 <svg role="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
@@ -105,7 +105,7 @@
         link.setAttribute('class', "_6ee5d24a _188dd678 _73d748cb c3772e31 _9b83bc80 _3b033628 d74054cf _70b0b4ae _21fc90f6 c06f7ac1 ce8728d9")
 
         link.innerHTML = `
-            <div style="display: flex; padding: 8px 16px;">
+            <div style="display: flex; padding: 8px 16px; color: #191919; font-size: 12px !important; font-weight: 600;">
                 <svg role="none" aria-hidden="true" class="artdeco-button__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 12px;" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
                 </svg>
