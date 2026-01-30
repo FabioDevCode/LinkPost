@@ -22,7 +22,7 @@
     // Configuration - Création de posts
     const CREATE_POST_ID = 'linkpost-create-post-link';
     const CREATE_POST_TEXT = 'Créer un post';
-    const CREATE_POST_URL = 'https://www.linkedin.com/feed/?shareActive';
+    const CREATE_POST_URL = 'https://www.linkedin.com/feed/?shareActive=true';
 
     // Configuration - Masquer pub Premium
     const PREMIUM_LINK_SELECTOR = 'a[href*="/premium/products"]';
