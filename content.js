@@ -5,7 +5,7 @@
  * dans le menu de navigation gauche du feed LinkedIn.
  * Il écoute les changements de storage pour afficher/masquer les liens dynamiquement.
  * Il peut également masquer les publicités Premium LinkedIn.
- */
+*/
 
 (function () {
     'use strict';
@@ -13,8 +13,6 @@
     console.log('LinkPost: Script loaded');
 
     // Configuration - Posts programmés
-    const NAV_ITEM_ATTRIBUTE = 'data-view-name';
-    const NAV_ITEM_VALUE = 'home-nav-left-rail-common-module-my-items';
     const LINK_ID = 'linkpost-scheduled-posts-link';
     const LINK_TEXT = 'Posts programmés';
     const LINK_URL = 'https://www.linkedin.com/feed/?shareActive=true&view=management';
@@ -52,15 +50,21 @@
 
     /**
      * Trouve le conteneur DIV parent des liens de navigation.
-     * Cherche un lien avec l'attribut data-view-name="home-nav-left-rail-common-module-my-items"
-     * puis remonte au conteneur DIV parent.
+     * Cherche un lien avec l'URL des événements (ou groupes) qui est plus stable
+     * que les classes obfusquées ou les attributs de vue (data-view-name).
      */
     function findNavContainer() {
-        // Chercher un lien existant avec l'attribut spécifique
-        const navLink = document.querySelector(`[${NAV_ITEM_ATTRIBUTE}="${NAV_ITEM_VALUE}"]`);
+        // Chercher le lien "Événements" via son href
+        let navLink = document.querySelector('a[href*="linkedin.com/events/"]');
+        
+        // Plan B : Essayer avec "Groupes" ou l'URL relative
+        if (!navLink) {
+            navLink = document.querySelector('a[href^="/events/"]') || document.querySelector('a[href*="/groups/"]');
+        }
+
         if (!navLink) return null;
 
-        // Le lien <a> est directement dans une <div> parent
+        // Le lien <a> est généralement directement dans une <div> parent qui contient tous les liens
         const parentDiv = navLink.parentElement;
         if (parentDiv && parentDiv.tagName === 'DIV') {
             return parentDiv;
@@ -76,9 +80,8 @@
         const link = document.createElement('a');
         link.href = LINK_URL;
         link.id = LINK_ID;
-        link.setAttribute(NAV_ITEM_ATTRIBUTE, NAV_ITEM_VALUE);
         link.setAttribute('tabindex', '0');
-        link.setAttribute('class', "_6ee5d24a _188dd678 _73d748cb c3772e31 _9b83bc80 _3b033628 d74054cf _70b0b4ae _21fc90f6 c06f7ac1 ce8728d9")
+        link.setAttribute('class', "_5c38935e c8688ca6 c4a80bc9 _4b6e327d _20ff3d72 _54b5eab8 f01356cf a870f353 _192b9ca2 _2e1b23f2 _2663c39a _45b859fd fd2651f1")
 
         link.innerHTML = `
             <div style="display: flex; padding: 8px 16px; color: #191919; font-size: 12px !important; font-weight: 600;">
@@ -100,7 +103,6 @@
         const link = document.createElement('a');
         link.href = CREATE_POST_URL;
         link.id = CREATE_POST_ID;
-        link.setAttribute(NAV_ITEM_ATTRIBUTE, NAV_ITEM_VALUE);
         link.setAttribute('tabindex', '0');
         link.setAttribute('class', "_6ee5d24a _188dd678 _73d748cb c3772e31 _9b83bc80 _3b033628 d74054cf _70b0b4ae _21fc90f6 c06f7ac1 ce8728d9")
 
