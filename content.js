@@ -23,11 +23,11 @@
     const CREATE_POST_URL = 'https://www.linkedin.com/feed/?shareActive=true';
 
     // Configuration - Masquer pub Premium
-    const PREMIUM_LINK_SELECTOR = 'a[href*="/premium/products"]';
+    const PREMIUM_LINK_SELECTOR = 'a[href*="/premium/"]';
     const HIDDEN_CLASS = 'linkpost-hidden';
 
     // Configuration - Masquer les jeux
-    const GAMES_SELECTOR = 'a[href^="/games"]';
+    const GAMES_SELECTOR = 'a[href*="/games/"]';
 
     // État local
     let isScheduledPostsEnabled = true;
@@ -202,21 +202,44 @@
         }
     }
 
+    function getPremiumContainer(link) {
+        // Cas 1 — navbar : div avec min-width inline
+        let el = link;
+        while (el && el !== document.body) {
+            el = el.parentElement;
+            if (el?.tagName === 'DIV' && el.style?.minWidth) {
+                return el;
+            }
+        }
+    
+        // Cas 2 — aside : remonter jusqu'au bon niveau
+        // On cherche la div dont le grand-parent est l'aside
+        el = link;
+        while (el && el !== document.body) {
+            el = el.parentElement;
+            if (
+                el?.tagName === 'DIV' &&
+                el.parentElement?.tagName === 'DIV' &&
+                el.parentElement?.parentElement?.tagName === 'DIV' &&
+                el.parentElement?.parentElement?.parentElement?.tagName === 'DIV' &&
+                el.parentElement?.parentElement?.parentElement?.parentElement?.tagName === 'ASIDE'
+            ) {
+                return el;
+            }
+        }
+    
+        return link.closest('div'); // fallback
+    }
+    
     /**
      * Masque ou affiche les DIVs contenant des liens Premium.
      */
     function updatePremiumAdsVisibility() {
         try {
-            const premiumLinks = document.querySelectorAll(PREMIUM_LINK_SELECTOR);
-
-            premiumLinks.forEach(link => {
-                const parentDiv = link.closest('div');
-                if (parentDiv) {
-                    if (isHidePremiumAdsEnabled) {
-                        parentDiv.classList.add(HIDDEN_CLASS);
-                    } else {
-                        parentDiv.classList.remove(HIDDEN_CLASS);
-                    }
+            document.querySelectorAll(PREMIUM_LINK_SELECTOR).forEach(link => {
+                const container = getPremiumContainer(link);
+                if (container) {
+                    container.style.display = isHidePremiumAdsEnabled ? 'none' : '';
                 }
             });
         } catch (e) {
@@ -224,37 +247,36 @@
         }
     }
 
+    function getGamesContainer(link) {
+        let el = link;
+        while (el && el !== document.body) {
+            el = el.parentElement;
+            // On remonte jusqu'à la div dont le parent direct est aside > div > div
+            if (
+                el?.tagName === 'DIV' &&
+                el.parentElement?.tagName === 'DIV' &&
+                el.parentElement?.parentElement?.tagName === 'DIV' &&
+                el.parentElement?.parentElement?.parentElement?.tagName === 'ASIDE'
+            ) {
+                return el;
+            }
+        }
+        return null;
+    }
+
     /**
      * Masque ou affiche les liens vers les jeux et les éléments associés.
      */
     function updateGamesVisibility() {
         try {
-            // Masquer les liens avec href commençant par /games
-            const gamesLinks = document.querySelectorAll(GAMES_SELECTOR);
-
-            gamesLinks.forEach(link => {
-                if (isHideGamesEnabled) {
-                    link.classList.add(HIDDEN_CLASS);
-                } else {
-                    link.classList.remove(HIDDEN_CLASS);
-                }
-            });
-
-            // Masquer l'élément avec data-view-name="game-card-zip" et son élément précédent
-            const gameCardZip = document.querySelector('[data-view-name="game-card-zip"]');
-            if (gameCardZip) {
-                if (isHideGamesEnabled) {
-                    gameCardZip.classList.add(HIDDEN_CLASS);
-                    // Masquer aussi l'élément précédent
-                    if (gameCardZip.previousElementSibling) {
-                        gameCardZip.previousElementSibling.classList.add(HIDDEN_CLASS);
-                    }
-                } else {
-                    gameCardZip.classList.remove(HIDDEN_CLASS);
-                    if (gameCardZip.previousElementSibling) {
-                        gameCardZip.previousElementSibling.classList.remove(HIDDEN_CLASS);
-                    }
-                }
+            // On prend seulement le PREMIER lien /games/ trouvé
+            // pour cibler le bloc entier une seule fois
+            const firstGameLink = document.querySelector(GAMES_SELECTOR);
+            if (!firstGameLink) return;
+    
+            const container = getGamesContainer(firstGameLink);
+            if (container) {
+                container.style.display = isHideGamesEnabled ? 'none' : '';
             }
         } catch (e) {
             console.error('LinkPost: Error updating Games visibility', e);
