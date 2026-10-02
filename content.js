@@ -84,11 +84,11 @@
         link.setAttribute('class', "_5c38935e c8688ca6 c4a80bc9 _4b6e327d _20ff3d72 _54b5eab8 f01356cf a870f353 _192b9ca2 _2e1b23f2 _2663c39a _45b859fd fd2651f1")
 
         link.innerHTML = `
-            <div style="display: flex; padding: 8px 16px; color: #191919; font-size: 12px !important; font-weight: 600;">
-                <svg role="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
+            <div style="display: flex; align-items: center; padding: 8px 16px; height: 40px; color: #3D3D3D; font-size: 14px !important; font-weight: 600;">
+                <svg role="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="24" height="24" style="margin-right: 8px; margin-left: 0px;">
+                    <path fill="#3D3D3D" d="M320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64zM296 184L296 320C296 328 300 335.5 306.7 340L402.7 404C413.7 411.4 428.6 408.4 436 397.3C443.4 386.2 440.4 371.4 429.3 364L344 307.2L344 184C344 170.7 333.3 160 320 160C306.7 160 296 170.7 296 184z"/>
                 </svg>
+
                 <p class="_7040b4e5 _80ee3fa5 efc776bd _8094c057 _257153ee _11daf7fc _7f504a6b _8b957603 bf376958">${LINK_TEXT}</p>
             </div>
         `;
@@ -107,10 +107,11 @@
         link.setAttribute('class', "_6ee5d24a _188dd678 _73d748cb c3772e31 _9b83bc80 _3b033628 d74054cf _70b0b4ae _21fc90f6 c06f7ac1 ce8728d9")
 
         link.innerHTML = `
-            <div style="display: flex; padding: 8px 16px; color: #191919; font-size: 12px !important; font-weight: 600;">
-                <svg role="none" aria-hidden="true" class="artdeco-button__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="margin-right: 12px;" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+            <div style="display: flex; align-items: center; padding: 8px 16px; height: 40px; color: #3D3D3D; font-size: 14px !important; font-weight: 600;">
+                <svg role="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="26" height="26" style="margin-right: 6px; margin-left: 0px;">
+                    <path fill="#3D3D3D" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM296 408L296 344L232 344C218.7 344 208 333.3 208 320C208 306.7 218.7 296 232 296L296 296L296 232C296 218.7 306.7 208 320 208C333.3 208 344 218.7 344 232L344 296L408 296C421.3 296 432 306.7 432 320C432 333.3 421.3 344 408 344L344 344L344 408C344 421.3 333.3 432 320 432C306.7 432 296 421.3 296 408z"/>
                 </svg>
+
                 <p class="_7040b4e5 _80ee3fa5 efc776bd _8094c057 _257153ee _11daf7fc _7f504a6b _8b957603 bf376958">${CREATE_POST_TEXT}</p>
             </div>
         `;

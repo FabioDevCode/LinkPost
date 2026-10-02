@@ -16,13 +16,26 @@ body {
     padding: 16px;
 }
 
+#icons-logo {
+    height: 24px;
+    margin-right: 8px;
+}
+
 h1 {
+    display: flex;
+    align-items: center;
     font-size: 18px;
     font-weight: 600;
     color: #0a66c2;
     margin-bottom: 16px;
     padding-bottom: 12px;
     border-bottom: 1px solid #e0e0e0;
+
+    sup {
+        font-size: 10px;
+        margin-left: 8px;
+        border-bottom: 2px solid #0a66c2;
+    }
 }
 
 /* Setting Row */
